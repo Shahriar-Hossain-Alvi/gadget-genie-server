@@ -35,9 +35,16 @@ async function run() {
         //create/send data from client to DB
         app.post('/service', async (req, res) => {
             const newService = req.body;
-            console.log('New added service', newService);
+            // console.log('New added service', newService);
 
             const result = await serviceCollection.insertOne(newService);
+            res.send(result);
+        })
+
+        //get the services data in api
+        app.get('/service', async (req, res) => {
+            const cursor = serviceCollection.find();
+            const result = await cursor.toArray();
             res.send(result);
         })
 
