@@ -51,7 +51,7 @@ async function run() {
             const result = await serviceCollection.insertOne(newService);
             res.send(result);
         })
-
+        
 
         //get all the services data in api
         app.get('/services', async (req, res) => {
@@ -73,6 +73,18 @@ async function run() {
             const query = { _id: new ObjectId(id) };
 
             const result = await serviceCollection.findOne(query);
+            res.send(result);
+        })
+
+        //get services data that a specific user added in the DB
+        app.get('/myservices', async (req, res) => {
+            console.log(req.query.providerEmail);
+            let query = {};
+
+            if (req.query?.providerEmail) {
+                query = { providerEmail: req.query.providerEmail }
+            }
+            const result = await serviceCollection.find(query).toArray();
             res.send(result);
         })
 
