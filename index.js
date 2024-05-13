@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -35,10 +35,15 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
 
-        //create a database in mongoDB
+        //create a database for services in mongoDB
         const serviceCollection = client.db('servicesDB').collection('services');
 
-        //create/send data from client to DB
+        //create a database for bookings in mongodb
+        const bookingCollection = client.db('servicesDB').collection('bookings');
+
+
+        // ============== services related api ========= //
+        //create/send services data from client to DB
         app.post('/services', async (req, res) => {
             const newService = req.body;
             // console.log('New added service', newService);
@@ -47,7 +52,8 @@ async function run() {
             res.send(result);
         })
 
-        //get the services data in api
+
+        //get all the services data in api
         app.get('/services', async (req, res) => {
             const cursor = serviceCollection.find();
             const result = await cursor.toArray();
@@ -61,6 +67,26 @@ async function run() {
             res.send(result);
         })
 
+        //get a single service 
+        app.get('/services/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+
+            const result = await serviceCollection.findOne(query);
+            res.send(result);
+        })
+
+
+
+        //================ booking related api ========//
+        //create/send booking data from client to DB
+        app.post('/bookings', async (req, res) => {
+            const newBooking = req.body;
+            console.log('New booking added', newBooking);
+
+            const result = await bookingCollection.insertOne(newBooking);
+            res.send(result);
+        })
 
 
 
