@@ -89,6 +89,15 @@ async function run() {
         })
 
 
+        //delete a service from DB
+        app.delete('/services/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await serviceCollection.deleteOne(query);
+
+            res.send(result);
+        })
+
 
         //================ booking related api ========//
         //create/send booking data from client to DB
@@ -99,8 +108,6 @@ async function run() {
             const result = await bookingCollection.insertOne(newBooking);
             res.send(result);
         })
-
-
 
 
         // Send a ping to confirm a successful connection
