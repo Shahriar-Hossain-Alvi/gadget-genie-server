@@ -51,7 +51,7 @@ async function run() {
             const result = await serviceCollection.insertOne(newService);
             res.send(result);
         })
-        
+
 
         //get all the services data in api
         app.get('/services', async (req, res) => {
@@ -95,6 +95,32 @@ async function run() {
             const query = { _id: new ObjectId(id) };
             const result = await serviceCollection.deleteOne(query);
 
+            res.send(result);
+        })
+
+        //update an existing service
+        app.patch('/services/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const updatedService = req.body;
+            console.log(id, updatedService);
+
+            const updateDoc = {
+                $set: {
+                    serviceName: updatedService.serviceName,
+                    imgURL: updatedService.imgURL,
+                    serviceArea: updatedService.serviceArea,
+                    price: updatedService.price,
+                    description: updatedService.description,
+                    status: updatedService.status
+                },
+            };
+
+            const options = { upsert: true };
+
+            const result = await serviceCollection.updateOne(query, updateDoc, options);
+
+            console.log(result);
             res.send(result);
         })
 
