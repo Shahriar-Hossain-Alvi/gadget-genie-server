@@ -101,6 +101,7 @@ async function run() {
         //update an existing service
         app.patch('/services/:id', async (req, res) => {
             const id = req.params.id;
+            const user = req.body;
             const query = { _id: new ObjectId(id) };
             const updatedService = req.body;
             console.log(id, updatedService);
@@ -133,6 +134,16 @@ async function run() {
 
             const result = await bookingCollection.insertOne(newBooking);
             res.send(result);
+        })
+
+        app.get('/bookings', async (req, res) => {
+            const bookedUser = req.query.bookedUserEmail;
+            const loggedUser = req.user;
+            console.log('booked user', bookedUser);
+            console.log('booked user', loggedUser);
+
+            const usersss = { bookedUser, loggedUser }
+            res.send(usersss);
         })
 
 
