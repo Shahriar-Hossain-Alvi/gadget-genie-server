@@ -78,7 +78,7 @@ async function run() {
 
         //get services data that a specific user added in the DB
         app.get('/myservices', async (req, res) => {
-            console.log(req.query.providerEmail);
+            // console.log(req.query.providerEmail);
             let query = {};
 
             if (req.query?.providerEmail) {
@@ -104,7 +104,7 @@ async function run() {
             // const user = req.body;
             const query = { _id: new ObjectId(id) };
             const updatedService = req.body;
-            console.log(id, updatedService);
+            // console.log(id, updatedService);
 
             const updateDoc = {
                 $set: {
@@ -121,7 +121,7 @@ async function run() {
 
             const result = await serviceCollection.updateOne(query, updateDoc, options);
 
-            console.log(result);
+            // console.log(result);
             res.send(result);
         })
 
@@ -130,27 +130,27 @@ async function run() {
         //create/send booking data from client to DB
         app.post('/bookings', async (req, res) => {
             const newBooking = req.body;
-            console.log('New booking added', newBooking);
+            // console.log('New booking added', newBooking);
 
             const result = await bookingCollection.insertOne(newBooking);
             res.send(result);
         })
 
         app.get('/bookings', async (req, res) => {
-            console.log(req.query.loggedUserEmail);
+            // console.log(req.query.loggedUserEmail);
             const query ={
                 bookedUserEmail: req.query.loggedUserEmail
             }
 
             const result = await bookingCollection.find(query).toArray();
-            console.log(result);
+            // console.log(result);
             res.send(result);
         })
 
 
         // Send a ping to confirm a successful connection
         // await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        // console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
         // await client.close();
@@ -167,5 +167,5 @@ app.get('/', (req, res) => {
 })
 
 app.listen(port, () => {
-    console.log(`server is running at port ${port}`);
+    // console.log(`server is running at port ${port}`);
 })
