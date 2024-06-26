@@ -148,7 +148,7 @@ async function run() {
         })
 
 
-        //================= services to do related api ========
+        // get data for services to do page 
         app.get('/todo-services/:email', async (req, res) => {
             const currentUserEmail = req.params.email;
 
@@ -156,6 +156,26 @@ async function run() {
                 providerEmail: currentUserEmail
             }
             const result = await bookingCollection.find(query).toArray();
+            res.send(result);
+        })
+
+        //update the status of the booked services
+        app.patch('/todo-services/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const updatedStatus = req.body;
+            console.log(id, updatedStatus);
+
+            const updateDoc = {
+                $set: {
+                    status: updatedStatus.status
+                },
+            };
+
+            const options = { upsert: true };
+
+            const result = await bookingCollection.updateOne(query, updateDoc, options);
+
             res.send(result);
         })
 
