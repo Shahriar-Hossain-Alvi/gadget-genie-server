@@ -138,7 +138,7 @@ async function run() {
 
         app.get('/bookings', async (req, res) => {
             // console.log(req.query.loggedUserEmail);
-            const query ={
+            const query = {
                 bookedUserEmail: req.query.loggedUserEmail
             }
 
@@ -147,6 +147,17 @@ async function run() {
             res.send(result);
         })
 
+
+        //================= services to do related api ========
+        app.get('/todo-services/:email', async (req, res) => {
+            const currentUserEmail = req.params.email;
+
+            const query = {
+                providerEmail: currentUserEmail
+            }
+            const result = await bookingCollection.find(query).toArray();
+            res.send(result);
+        })
 
         // Send a ping to confirm a successful connection
         // await client.db("admin").command({ ping: 1 });
