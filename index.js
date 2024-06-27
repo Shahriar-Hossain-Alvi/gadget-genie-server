@@ -55,7 +55,14 @@ async function run() {
 
         //get all the services data in api
         app.get('/services', async (req, res) => {
-            const cursor = serviceCollection.find();
+            const filter = req.query;
+            console.log(filter);
+
+            const query = {
+                serviceName: { $regex: filter?.search, $options: 'i' }
+            };
+
+            const cursor = serviceCollection.find(query);
             const result = await cursor.toArray();
             res.send(result);
         })
@@ -67,6 +74,7 @@ async function run() {
             res.send(result);
         })
 
+
         //get a single service 
         app.get('/services/:id', async (req, res) => {
             const id = req.params.id;
@@ -75,6 +83,7 @@ async function run() {
             const result = await serviceCollection.findOne(query);
             res.send(result);
         })
+
 
         //get services data that a specific user added in the DB
         app.get('/myservices', async (req, res) => {
@@ -97,6 +106,7 @@ async function run() {
 
             res.send(result);
         })
+
 
         //update an existing service
         app.patch('/services/:id', async (req, res) => {
@@ -124,6 +134,7 @@ async function run() {
             // console.log(result);
             res.send(result);
         })
+
 
 
         //================ booking related api ========//
@@ -164,7 +175,6 @@ async function run() {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const updatedStatus = req.body;
-            console.log(id, updatedStatus);
 
             const updateDoc = {
                 $set: {
