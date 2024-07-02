@@ -11,3 +11,8 @@
 - MongoDB
 - Cors
 - Dotenv
+
+## If you want to clone and run this project on your local device use
+```
+npm install
+```
